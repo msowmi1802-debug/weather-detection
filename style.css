@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body  {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(
+        135deg,
+        #00c6ff,
+        #0072ff,
+        #6a11cb
+    );
+
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+}
+    body.default {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+body.Clear {
+    background: linear-gradient(135deg, #56ccf2, #2f80ed);
+}
+
+body.Clouds {
+    background: linear-gradient(135deg, #757f9a, #d7dde8);
+}
+
+body.Rain {
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+}
+
+body.Thunderstorm {
+    background: linear-gradient(135deg, #232526, #414345);
+}
+
+body.Snow {
+    background: linear-gradient(135deg, #e6dada, #274046);
+}
+
+.advice-box {
+    margin-top: 20px;
+    padding: 15px;
+
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+}
+.container {
+    
+    border: 1px solid rgba(255, 255, 255, 0.329);
+transition: 0.3s ease;
+    width: 450px;
+    border: 1px solid rgba(255,255,255,0.2);
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.container:hover {
+    transform: scale(1.02);
+}
+.weather-info h2 {
+    font-size: 32px;
+}
+
+.weather-info p {
+    font-size: 20px;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+
+    border: none;
+    border-radius: 10px;
+
+    outline: none;
+}
+
+button {
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    background: white;
+    font-weight: bold;
+}
+
+.weather-info {
+    margin-top: 25px;
+    color: white;
+}
+
+.weather-info h2 {
+    margin-bottom: 15px;
+}
+
+.weather-info p {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

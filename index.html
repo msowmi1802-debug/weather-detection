@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WeatherScape</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="{{ weather.condition if weather else 'default' }}">
+
+    <div class="container">
+
+        <h1>🌦️ WeatherScape</h1>
+
+        <form method="POST">
+            <input
+                type="text"
+                name="city"
+                placeholder="Enter City"
+                required
+            >
+
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        {% if weather %}
+        <div class="weather-info">
+
+            <h2>📍 {{ weather.city }}</h2>
+            <p>TEST: {{ weather.condition }}</p>
+            <p>🌡️ {{ weather.temp }} °C</p>
+            <p>💧 {{ weather.humidity }} %</p>
+            <p>🌬️ {{ weather.wind }} m/s</p>
+            
+            <div class="advice-box">
+                {{ weather.advice }}
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
