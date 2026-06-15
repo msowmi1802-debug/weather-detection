@@ -8,85 +8,90 @@ API_KEY = "5155a405f99f4f6a335cdf9ac78c629b"
 @app.route("/", methods=["GET", "POST"])
 def home():
     weather = None
-
+    error = None
+    city = ""
     if request.method == "POST":
-        city = request.form["city"]
+      city = request.form.get("city", "").strip()
+      url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
 
-        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+      response = requests.get(url)
+      data = response.json()
 
-        response = requests.get(url)
-        data = response.json()
+      print(data)
+      print("COD =", data.get("cod"))
 
-        print("City entered:", city)
-        print("API city:", data["name"])
-        print("Main:", data["weather"][0]["main"])
-        print("Description:", data["weather"][0]["description"])
-        print("--------------------")
+      if str(data.get("cod")) == "200":
 
-        if data.get("cod") == 200:
+         print("VALID CITY")
+         print("API city:", data["name"])
+         print("Main:", data["weather"][0]["main"])
+         print("Description:", data["weather"][0]["description"])
+         temp = data["main"]["temp"]
+         condition = data["weather"][0]["main"]
+         wind_speed = data["wind"]["speed"]
 
-            temp = data["main"]["temp"]
-            condition = data["weather"][0]["main"]
-            wind_speed = data["wind"]["speed"]
-            if condition == "Clear":
-               weather_type = "☀️ Sunny"
+         if condition == "Clear":
+            weather_type = "☀️ Sunny"
 
-            elif condition == "Clouds":
-              weather_type = "☁️ Cloudy"
+         elif condition == "Clouds":
+            weather_type = "☁️ Cloudy"
 
-            elif condition in ["Rain", "Drizzle"]:
-               weather_type = "🌧️ Rainy"
+         elif condition in ["Rain", "Drizzle"]:
+            weather_type = "🌧️ Rainy"
 
-            elif condition == "Thunderstorm":
-                weather_type = "⛈️ Stormy"
+         elif condition == "Thunderstorm":
+            weather_type = "⛈️ Stormy"
 
-            elif condition == "Snow":
-               weather_type = "❄️ Snowy"
+         elif condition == "Snow":
+            weather_type = "❄️ Snowy"
 
-            elif condition in ["Mist", "Fog", "Haze"]:
-              weather_type = "🌫️ Foggy"
+         elif condition in ["Mist", "Fog", "Haze"]:
+            weather_type = "🌫️ Foggy"
 
-            elif wind_speed > 10:
-               weather_type = "🌬️ Windy"
-            
-            else:
-               weather_type = "🌤️ Pleasant"
-            print("Weather Type:", weather_type)
+         elif wind_speed > 10:
+            weather_type = "🌬️ Windy"
 
-            if condition == "Rain":
-                advice = "☂️ Don't forget your umbrella. Roads may be slippery."
+         else:
+            weather_type = "🌤️ Pleasant"
 
-            elif condition == "Thunderstorm":
-                advice = "⛈️ Stay indoors if possible and avoid open areas."
+         if condition == "Rain":
+            advice = "☂️ Don't forget your umbrella. Roads may be slippery."
 
-            elif condition == "Snow":
-                advice = "🧥 It's freezing outside. Wear warm clothes and stay cozy."
+         elif condition == "Thunderstorm":
+            advice = "⛈️ Stay indoors if possible and avoid open areas."
 
-            elif temp >= 38:
-                advice = "🔥 It's extremely hot today! Wear sunscreen, stay hydrated, and avoid direct sunlight."
+         elif condition == "Snow":
+            advice = "🧥 It's freezing outside. Wear warm clothes and stay cozy."
 
-            elif temp >= 30:
-                advice = "😎 It's quite warm outside. Carry water and wear light clothing."
+         elif temp >= 38:
+            advice = "🔥 It's extremely hot today! Wear sunscreen, stay hydrated."
 
-            elif temp <= 15:
-                advice = "🥶 It's chilly today. A sweater or jacket is recommended."
+         elif temp >= 30:
+            advice = "😎 It's quite warm outside. Carry water and wear light clothing."
 
-            elif condition == "Clear":
-                advice = "☀️ Perfect weather for outdoor activities. Enjoy your day!"
+         elif temp <= 15:
+            advice = "🥶 It's chilly today. A sweater or jacket is recommended."
 
-            else:
-                advice = "🌤️ The weather looks pleasant today."
+         elif condition == "Clear":
+            advice = "☀️ Perfect weather for outdoor activities. Enjoy your day!"
 
-            weather = {
-                "city": data["name"],
-                "temp": data["main"]["temp"],
-                "humidity": data["main"]["humidity"],
-                "condition": weather_type,
-                "wind": data["wind"]["speed"],
-                "advice": advice
-            }
+         else:
+            advice = "🌤️ The weather looks pleasant today."
 
-    return render_template("index.html", weather=weather)
+         weather = {
+            "city": data["name"],
+            "temp": temp,
+            "humidity": data["main"]["humidity"],
+            "condition": weather_type,
+            "wind": wind_speed,
+            "advice": advice
+        }
+      else:
+            print("INVALID CITY")
+            error = "❌ City not found. Please enter a valid city name."
+   
+    return render_template("index.html", weather=weather,error=error
+                           )
 
 if __name__ == "__main__":
     app.run(debug=True)
